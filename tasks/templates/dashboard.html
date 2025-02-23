@@ -1,0 +1,40 @@
+<h2>Welcome, {{ user.username }}</h2>
+
+<!-- task search form -->
+<h3>Search Tasks</h3>
+<form method="get" action="{% url 'dashboard' %}">
+    <input type="text" name="query" value="{{ request.GET.query }}">
+    <button type="submit">Search</button>
+</form>
+
+<!-- task List -->
+<h3>Your Tasks</h3>
+<ul>
+    {% for task in tasks %}
+        <li>{{ task.title }} - {{ task.description }}
+            <form method="post" action="{% url 'delete_task' task.id %}">
+                <!-- {% csrf_token %} -->
+                <button type="submit">Delete</button>
+            </form>
+        </li>
+    {% empty %}
+        <li>No tasks found.</li>
+    {% endfor %}
+</ul>
+
+<!-- add task form -->
+<h3>Add Task</h3>
+<form method="post" action="{% url 'add_task' %}">
+    {% csrf_token %}
+    <input type="text" name="title" placeholder="Title" required>
+    <input type="text" name="description" placeholder="Description" required>
+    <button type="submit">Add</button>
+</form>
+
+<!-- logout -->
+<form method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit">Logout</button>
+</form>
+
+<a href="{% url 'csrf_exploit' %}">Click here to test CSRF exploit</a>
